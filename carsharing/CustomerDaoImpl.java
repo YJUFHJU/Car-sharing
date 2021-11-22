@@ -106,6 +106,9 @@ public class CustomerDaoImpl implements EntityDao<Customer> {
         }
     }
 
+    /*
+    Change RENTED_CAR_ID value for row that corresponds to Customer customer with newId value
+    */
     public boolean updateRentedCarId(Customer customer, Integer newId) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(UPDATE_RENTED_CAR_ID)) {
