@@ -22,6 +22,6 @@ public class Customer extends TableEntity {
 
     @Override
     public String toString() {
-        return String.format("Customer:[id: %d; name: %s; rentedCarId: %d]", getId(), getName(), getRentedCarId());
+        return String.format("Customer:[ID: %d; NAME: %s; RENTED_CAR_ID: %d]", getId(), getName(), rentedCarId);
     }
 }

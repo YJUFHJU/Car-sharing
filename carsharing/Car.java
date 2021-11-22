@@ -19,7 +19,7 @@ public class Car extends TableEntity {
 
     @Override
     public String toString() {
-        return String.format("%d. %s", getId(), getName());
+        return String.format("Car: [ID: %d, NAME: %s, COMPANY_ID: %d]", getId(), getName(), companyId);
     }
 
 }

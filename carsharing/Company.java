@@ -8,6 +8,6 @@ public class Company extends TableEntity {
 
     @Override
     public String toString() {
-        return String.format("%d. %s", getId(), getName());
+        return String.format("Company: [ID: %d, NAME: %s]", getId(), getName());
     }
 }
