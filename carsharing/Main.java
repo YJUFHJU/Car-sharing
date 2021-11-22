@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         try (BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
-
+        	
             DBManager.createTableCompany();
             DBManager.createTableCar();
             DBManager.createTableCustomer();

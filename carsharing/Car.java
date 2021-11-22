@@ -1,5 +1,8 @@
 package carsharing;
 
+/*
+ * Class for representing element of the CAR table
+ */
 public class Car extends Entity {
     private Integer companyId;
 

@@ -3,10 +3,20 @@ package carsharing.menunavigating;
 
 import java.io.BufferedReader;
 
+/*
+ * Template for any Menu class
+ */
 public interface Menu {
 
+	/*
+	 * Method that prints options in the standart output
+	 */
     void printOptions();
 
+    /*
+     * Main method for shifting between other Menu classes,
+     * proccessing user input and calling corresponding methods
+     */
     void navigate(BufferedReader userInput);
 
     class ERROR_CODES {

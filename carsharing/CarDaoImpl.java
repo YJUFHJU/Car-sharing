@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Class implementing EntityDao interface for CAR table
+ */
 public class CarDaoImpl implements EntityDao<Car> {
     private final static String tableName = "CAR";
 
@@ -80,6 +83,11 @@ public class CarDaoImpl implements EntityDao<Car> {
         }
     }
 
+    /*
+     * Select all available cars with the given Company ID
+     * (cars that are not taken by other customers at the moment)
+     * and return them as a List of Car objects
+     */
     public List<Car> selectAvlCarsByCoId(int companyID) {
         List<Car> cars = new ArrayList<>();
 
@@ -102,6 +110,10 @@ public class CarDaoImpl implements EntityDao<Car> {
         return cars;
     }
 
+    /*
+     * Select all cars with the given Company ID
+     * and return them as a List of Car objects
+     */
     public List<Car> selectCarsByCoId(int companyID) {
         List<Car> cars = new ArrayList<>();
 

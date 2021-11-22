@@ -1,5 +1,8 @@
 package carsharing;
 
+/*
+ * Base class for representing element of the table
+ */
 public class Entity {
     private Integer id;
     private String name;

@@ -8,6 +8,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Class implementing EntityDao interface for CUSTOMER table
+ */
 public class CustomerDaoImpl implements EntityDao<Customer> {
     private final static String tableName = "CUSTOMER";
 

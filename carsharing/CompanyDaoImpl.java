@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Class implementing EntityDao interface for COMPANY table
+ */
 public class CompanyDaoImpl implements EntityDao<Company> {
     private final static String tableName = "COMPANY";
 

@@ -129,6 +129,7 @@ public class ManagerMenuCompanies implements Menu {
         }
     }
 
+    //Getting selected Company
     Company chooseCompany(BufferedReader userInput) {
         Company company = null;
         CompanyDaoImpl companyDao = new CompanyDaoImpl();
