@@ -61,15 +61,15 @@ public class MainMenu implements Menu {
         try {
             String name = userInput.readLine().strip();
             customerDao.insertCustomer(new Customer(1, name, null));
-            System.out.println("The customer was created!");
+            System.out.println("\nThe customer was created!");
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
             switch (sqlicve.getErrorCode()) {
                 case ERROR_CODES.NOT_UNIQUE: //name is not unique
-                    System.out.println("Customer with such name already exists.");
+                    System.out.println("\nCustomer with such name already exists.");
                     break;
                 case ERROR_CODES.IS_NULL: //name is null
-                    System.out.println("Customer name can not be empty.");
+                    System.out.println("\nCustomer name can not be empty.");
                     break;
                 default:
                     sqlicve.printStackTrace();

@@ -7,9 +7,13 @@ public interface CustomerDao {
 
     List<Customer> selectAllCustomers();
 
-    Customer selectCustomerById(Integer id);
+    Customer selectCustomer(Integer id);
 
     void insertCustomer(Customer customer) throws SQLException;
+
+    void deleteCustomer(int ID) throws SQLException;
+
+    void updateCustomer(int ID, String newName) throws SQLException;
 
     boolean updateRentedCarId(Customer customer, Integer newId) throws SQLException;
 }

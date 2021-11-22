@@ -7,11 +7,11 @@ public interface CompanyDao {
 
     List<Company> selectAllCompanies();
 
-    Company selectCompanyById(int id);
+    Company selectCompany(int ID);
 
     void insertCompany(Company company) throws SQLException;
 
-    //void removeCompanyById(int id);
+    void deleteCompany(int ID) throws SQLException;
 
-    //void updateCompanyById(int id, String... newProps);
+    void updateCompany(int ID, String newName) throws SQLException;
 }

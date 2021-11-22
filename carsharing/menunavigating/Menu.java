@@ -11,6 +11,7 @@ public interface Menu {
 
     class ERROR_CODES {
         public final static int IS_NULL = 23502;
+        public final static int REFER_INTEGRITY = 23503;
         public final static int NOT_UNIQUE = 23505;
     }
 }

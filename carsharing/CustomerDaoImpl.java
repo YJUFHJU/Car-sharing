@@ -14,7 +14,8 @@ public class CustomerDaoImpl implements CustomerDao {
     private final static String INSERT_CUSTOMER = String.format("insert into %s(NAME, RENTED_CAR_ID) values(?, ?);", tableName);
     private final static String SELECT_ALL_CUSTOMERS = String.format("select * from %s;", tableName);
     private final static String SELECT_CUSTOMER_BY_ID = String.format("select * from %s where ID=?;", tableName);
-    private final static String UPDATE_CUSTOMER = String.format("update %s set NAME=?, RENTED_CAR_ID=? where ID=?;", tableName);
+    private final static String DELETE_CUSTOMER_BY_ID = String.format("delete from %s where ID=?;", tableName);
+    private final static String RENAME_CUSTOMER_BY_ID = String.format("update %s set NAME=? where ID=?;", tableName);
     private final static String UPDATE_RENTED_CAR_ID = String.format("update %s set RENTED_CAR_ID=? where ID=?;", tableName);
 
     @Override
@@ -41,7 +42,7 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public Customer selectCustomerById(Integer ID) {
+    public Customer selectCustomer(Integer ID) {
         Customer customer = null;
 
         try (Connection connection = DBManager.getConnection();
@@ -77,6 +78,27 @@ public class CustomerDaoImpl implements CustomerDao {
             else
                 prepStat.setInt(2, customer.getRentedCarId());
 
+            prepStat.execute();
+        }
+    }
+
+    @Override
+    public void deleteCustomer(int ID) throws SQLException {
+        try (Connection connection = DBManager.getConnection();
+             PreparedStatement prepStat = connection.prepareStatement(DELETE_CUSTOMER_BY_ID)) {
+
+            prepStat.setInt(1, ID);
+            prepStat.execute();
+        }
+    }
+
+    @Override
+    public void updateCustomer(int ID, String newName) throws SQLException {
+        try (Connection connection = DBManager.getConnection();
+             PreparedStatement prepStat = connection.prepareStatement(RENAME_CUSTOMER_BY_ID)) {
+
+            prepStat.setString(1, newName);
+            prepStat.setInt(2, ID);
             prepStat.execute();
         }
     }

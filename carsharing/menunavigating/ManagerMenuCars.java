@@ -4,8 +4,6 @@ import carsharing.Car;
 import carsharing.CarDao;
 import carsharing.CarDaoImpl;
 import carsharing.Company;
-import carsharing.CompanyDao;
-import carsharing.CompanyDaoImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,14 +15,18 @@ public class ManagerMenuCars implements Menu {
 
     @Override
     public void printOptions() {
-        System.out.println("\n1. Car list\n2. Create a car\n0. Back");
+        System.out.println("\n1. Car list" +
+                "\n2. Create a car" +
+                "\n3. Delete a car" +
+                "\n4. Rename a car" +
+                "\n0. Back");
     }
 
     @Override
     public void navigate(BufferedReader userInput) {
         String option = "0";
         CarDao carDao = new CarDaoImpl();
-        Company chosenCompany = chooseCompany(userInput);
+        Company chosenCompany = new ManagerMenuCompanies().chooseCompany(userInput);
 
         if (chosenCompany == null)
             return; //No companies or 'Back' option
@@ -44,7 +46,13 @@ public class ManagerMenuCars implements Menu {
                     printCarsList(carDao.selectCarsByCoId(chosenCompany.getId()));
                     break;
                 case "2":
-                    createCarByCompanyId(userInput, carDao, chosenCompany);
+                    createCarByCompany(userInput, chosenCompany);
+                    break;
+                case "3":
+                    deleteCarByCompany(userInput, chosenCompany);
+                    break;
+                case"4":
+                    renameCarByCompany(userInput, chosenCompany);
                     break;
                 case "0":
                     //do nothing
@@ -55,7 +63,52 @@ public class ManagerMenuCars implements Menu {
         } while (!"0".equals(option));
     }
 
-    private void createCarByCompanyId(BufferedReader userInput, CarDao carDao, Company company) {
+    private void renameCarByCompany(BufferedReader userInput, Company company) {
+        CarDao carDao = new CarDaoImpl();
+        Car chosenCar = chooseCarByCompany(userInput, company);
+
+        if (chosenCar == null)
+            return;
+
+        System.out.println("\nEnter the car new name:");
+
+        try {
+            carDao.updateCar(chosenCar.getId(), userInput.readLine().strip());
+            System.out.println("The car was renamed!");
+        } catch (SQLIntegrityConstraintViolationException sqlicve) {
+
+            switch (sqlicve.getErrorCode()) {
+                case ERROR_CODES.NOT_UNIQUE: //name is not unique
+                    System.out.println("Different car with such name already exists.");
+                    break;
+                case ERROR_CODES.IS_NULL: //name is null
+                    System.out.println("Car name can not be empty.");
+                    break;
+                default:
+                    sqlicve.printStackTrace();
+            }
+        } catch (SQLException | IOException exc) {
+            exc.printStackTrace();
+        }
+    }
+
+    private void deleteCarByCompany(BufferedReader userInput, Company company) {
+        CarDao carDao = new CarDaoImpl();
+        Car chosenCar = chooseCarByCompany(userInput, company);
+
+        if (chosenCar == null)
+            return;
+
+        try {
+            carDao.deleteCar(chosenCar.getId());
+            System.out.println("Car was deleted successfully!");
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+    }
+
+    private void createCarByCompany(BufferedReader userInput, Company company) {
+        CarDao carDao = new CarDaoImpl();
         System.out.println("\nEnter the car name:");
 
         try {
@@ -78,28 +131,17 @@ public class ManagerMenuCars implements Menu {
         }
     }
 
-    boolean printCarsList(List<Car> cars) {
-        if (cars.isEmpty()) {
-            System.out.println("\nThe car list is empty!");
-            return false;
-        } else
-            System.out.println("\nCar list:");
+    Car chooseCarByCompany(BufferedReader userInput, Company chosenCompany) {
+        Car car = null;
+        CarDao carDao = new CarDaoImpl();
+        ManagerMenuCars menuCars = new ManagerMenuCars();
 
-        for (int i = 1; i <= cars.size(); i++) {
-            System.out.printf("%d. %s\n", i, cars.get(i - 1).getName());
-        }
-        return true;
-    }
-
-    Company chooseCompany(BufferedReader userInput) {
-        Company company = null;
-        CompanyDao companyDao = new CompanyDaoImpl();
-        List<Company> companies = companyDao.selectAllCompanies();
-
-        if (!printCompaniesList(companies))
+        List<Car> companyCars = carDao.selectCarsByCoId(chosenCompany.getId());
+        if (!menuCars.printCarsList(companyCars))
             return null;
+        System.out.println("0. Back");
 
-        while (company == null) {
+        while (car == null) {
             int option;
 
             try {
@@ -114,27 +156,24 @@ public class ManagerMenuCars implements Menu {
             if (option == 0)
                 return null;
 
-            if (option > companies.size())
-                System.out.println("Company with such number does not exist.");
+            if (option > companyCars.size())
+                System.out.println("Car with such number does not exist.");
             else
-                company = companyDao.selectCompanyById(companies.get(option - 1).getId());
-
+                car = carDao.selectCar(companyCars.get(option - 1).getId());
         }
-
-        return company;
+        return car;
     }
 
-    boolean printCompaniesList(List<Company> companies) {
-        if (companies.isEmpty()) {
-            System.out.println("\nThe company list is empty!");
+    boolean printCarsList(List<Car> cars) {
+        if (cars.isEmpty()) {
+            System.out.println("\nThe car list is empty!");
             return false;
         } else
-            System.out.println("\nChoose the company:");
+            System.out.println("\nCar list:");
 
-        for (int i = 1; i <= companies.size(); i++) {
-            System.out.printf("%d. %s\n", i, companies.get(i - 1).getName());
+        for (int i = 1; i <= cars.size(); i++) {
+            System.out.printf("%d. %s\n", i, cars.get(i - 1).getName());
         }
-        System.out.println("0. Back");
         return true;
     }
 }

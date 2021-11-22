@@ -19,10 +19,11 @@ public class CustomerMenu implements Menu {
 
     @Override
     public void printOptions() {
-        System.out.println("\n1. Rent a car\n" +
-                "2. Return a rented car\n" +
-                "3. My rented car\n" +
-                "0. Back");
+        System.out.println("\n1. Rent a car" +
+                "\n2. Return a rented car" +
+                "\n3. My rented car" +
+                "\n4. Profile settings" +
+                "\n0. Back");
     }
 
     @Override
@@ -52,6 +53,10 @@ public class CustomerMenu implements Menu {
                 case "3":
                     showRentedCar(chosenCustomer);
                     break;
+                case "4":
+                    CustomerProfile.page(userInput, chosenCustomer);
+                    if (chosenCustomer.getId() == null)
+                        return;
                 case "0":
                     //do nothing
                     break;
@@ -73,8 +78,8 @@ public class CustomerMenu implements Menu {
             return;
         }
 
-        car = carDao.selectCarById(customer.getRentedCarId());
-        company = companyDao.selectCompanyById(car.getCompanyId());
+        car = carDao.selectCar(customer.getRentedCarId());
+        company = companyDao.selectCompany(car.getCompanyId());
 
         System.out.printf("\nYour rented car:\n%s\nCompany:\n%s\n", car.getName(), company.getName());
     }
@@ -101,7 +106,7 @@ public class CustomerMenu implements Menu {
     private boolean rentCar(BufferedReader userInput, Customer customer) {
         Car chosenCar;
         CustomerDao customerDao = new CustomerDaoImpl();
-        ManagerMenuCars menuCars = new ManagerMenuCars();
+        ManagerMenuCompanies menuCompanies = new ManagerMenuCompanies();
         Company chosenCompany;
 
         //customer already has a car
@@ -110,7 +115,7 @@ public class CustomerMenu implements Menu {
             return false;
         }
 
-        chosenCompany = menuCars.chooseCompany(userInput);
+        chosenCompany = menuCompanies.chooseCompany(userInput);
         if(chosenCompany == null)
             return false;
 
@@ -173,7 +178,7 @@ public class CustomerMenu implements Menu {
             if (option > companyCars.size())
                 System.out.println("Car with such number does not exist.");
             else
-                car = carDao.selectCarById(companyCars.get(option - 1).getId());
+                car = carDao.selectCar(companyCars.get(option - 1).getId());
         }
         return car;
     }
@@ -204,7 +209,7 @@ public class CustomerMenu implements Menu {
             if (option > customers.size())
                 System.out.println("Customer with such number does not exist.");
             else
-                customer = customerDao.selectCustomerById(customers.get(option - 1).getId());
+                customer = customerDao.selectCustomer(customers.get(option - 1).getId());
         }
 
         return customer;

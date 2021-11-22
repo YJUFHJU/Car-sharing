@@ -64,10 +64,11 @@ class DBManager {
                     "NAME VARCHAR(50) NOT NULL," +
                     "COMPANY_ID INT NOT NULL," +
                     "PRIMARY KEY (ID)," +
-                    "UNIQUE KEY car_name_unique (NAME)," +
-                    "CONSTRAINT fk_company_id FOREIGN KEY (COMPANY_ID)" +
-                    "REFERENCES COMPANY(ID)" +
-                    "ON UPDATE CASCADE" +
+                    " UNIQUE KEY car_name_unique (NAME)," +
+                    " CONSTRAINT fk_company_id FOREIGN KEY (COMPANY_ID)" +
+                    " REFERENCES COMPANY(ID)" +
+                    " ON DELETE CASCADE" +
+                    " ON UPDATE CASCADE" +
                     ");");
         } catch (SQLException sqle) {
             sqle.printStackTrace();

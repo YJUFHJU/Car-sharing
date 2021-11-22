@@ -5,13 +5,13 @@ import java.util.List;
 
 public interface CarDao {
 
-    List<Car> selectCarsByCoId(int companyId);
+    List<Car> selectCarsByCoId(int companyID);
 
-    Car selectCarById(int ID);
+    Car selectCar(int ID);
 
     void insertCar(Car car) throws SQLException;
 
-    //void removeCarById(int id);
+    void deleteCar(int ID) throws SQLException;
 
-    //void updateCarById(int id, String... newProps);
+    void updateCar(int ID, String newName) throws SQLException;
 }

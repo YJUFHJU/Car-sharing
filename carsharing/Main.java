@@ -18,7 +18,6 @@ public class Main {
 
             Menu start = new MainMenu();
             start.navigate(userInput);
-            //DBManager.dropTables();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
