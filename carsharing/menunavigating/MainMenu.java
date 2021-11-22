@@ -1,7 +1,6 @@
 package carsharing.menunavigating;
 
 import carsharing.Customer;
-import carsharing.CustomerDao;
 import carsharing.CustomerDaoImpl;
 
 import java.io.BufferedReader;
@@ -57,10 +56,10 @@ public class MainMenu implements Menu {
     public void createCustomer(BufferedReader userInput) {
         System.out.println("\nEnter the customer name:");
 
-        CustomerDao customerDao = new CustomerDaoImpl();
+        CustomerDaoImpl customerDao = new CustomerDaoImpl();
         try {
             String name = userInput.readLine().strip();
-            customerDao.insertCustomer(new Customer(1, name, null));
+            customerDao.insert(new Customer(1, name, null));
             System.out.println("\nThe customer was created!");
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 

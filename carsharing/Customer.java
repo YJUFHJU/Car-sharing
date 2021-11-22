@@ -1,6 +1,6 @@
 package carsharing;
 
-public class Customer extends TableEntity {
+public class Customer extends Entity {
     private Integer rentedCarId;
 
     public Customer(Integer id, String name, Integer rentedCarId) {

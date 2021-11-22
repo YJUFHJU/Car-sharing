@@ -1,7 +1,6 @@
 package carsharing.menunavigating;
 
 import carsharing.Customer;
-import carsharing.CustomerDao;
 import carsharing.CustomerDaoImpl;
 
 import java.io.BufferedReader;
@@ -48,27 +47,27 @@ public class CustomerProfile {
     }
 
     static void deleteCustomer(Customer customer) {
-        CustomerDao customerDao = new CustomerDaoImpl();
+        CustomerDaoImpl customerDao = new CustomerDaoImpl();
 
         try {
-            customerDao.deleteCustomer(customer.getId());
+            customerDao.delete(customer.getId());
             customer.setId(null);
-            System.out.println("Profile was deleted successfully!");
+            System.out.println("\nProfile was deleted successfully!");
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
     }
 
     static void renameCustomer(Customer customer, BufferedReader userInput) {
-        CustomerDao customerDao = new CustomerDaoImpl();
+        CustomerDaoImpl customerDao = new CustomerDaoImpl();
 
         System.out.println("\nEnter new nickname:");
 
         try {
             String newName = userInput.readLine().strip();
-            customerDao.updateCustomer(customer.getId(), newName);
+            customerDao.update(customer.getId(), newName);
             customer.setName(newName);
-            System.out.println("Nickname was changed!");
+            System.out.printf("\nNickname was changed to '%s'.\n", newName);
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
             switch (sqlicve.getErrorCode()) {

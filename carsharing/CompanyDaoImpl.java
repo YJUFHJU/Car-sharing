@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyDaoImpl implements CompanyDao {
+public class CompanyDaoImpl implements EntityDao<Company> {
     private final static String tableName = "COMPANY";
 
     private final static String INSERT_COMPANY = String.format("insert into %s(NAME) values(?);", tableName);
@@ -18,7 +18,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
 
     @Override
-    public List<Company> selectAllCompanies() {
+    public List<Company> selectAll() {
         List<Company> companies = new ArrayList<>();
 
         try (Connection connection = DBManager.getConnection();
@@ -40,7 +40,7 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public Company selectCompany(int ID) {
+    public Company select(int ID) {
         Company company = null;
 
         try (Connection connection = DBManager.getConnection();
@@ -64,7 +64,7 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public void insertCompany(Company company) throws SQLException {
+    public void insert(Company company) throws SQLException {
 
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(INSERT_COMPANY)) {
@@ -75,7 +75,7 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public void deleteCompany(int ID) throws SQLException {
+    public void delete(int ID) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(DELETE_COMPANY_BY_ID)) {
 
@@ -85,7 +85,7 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public void updateCompany(int ID, String newName) throws SQLException {
+    public void update(int ID, String newName) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(RENAME_COMPANY_BY_ID)) {
 

@@ -1,13 +1,10 @@
 package carsharing.menunavigating;
 
 import carsharing.Car;
-import carsharing.CarDao;
 import carsharing.CarDaoImpl;
 import carsharing.Company;
-import carsharing.CompanyDao;
 import carsharing.CompanyDaoImpl;
 import carsharing.Customer;
-import carsharing.CustomerDao;
 import carsharing.CustomerDaoImpl;
 
 import java.io.BufferedReader;
@@ -70,22 +67,22 @@ public class CustomerMenu implements Menu {
     private void showRentedCar(Customer customer) {
         Car car;
         Company company;
-        CarDao carDao = new CarDaoImpl();
-        CompanyDao companyDao = new CompanyDaoImpl();
+        CarDaoImpl carDao = new CarDaoImpl();
+        CompanyDaoImpl companyDao = new CompanyDaoImpl();
 
         if (customer.getRentedCarId() == null) {
             System.out.println("\nYou didn't rent a car!");
             return;
         }
 
-        car = carDao.selectCar(customer.getRentedCarId());
-        company = companyDao.selectCompany(car.getCompanyId());
+        car = carDao.select(customer.getRentedCarId());
+        company = companyDao.select(car.getCompanyId());
 
         System.out.printf("\nYour rented car:\n%s\nCompany:\n%s\n", car.getName(), company.getName());
     }
 
     private boolean returnCar(Customer customer) {
-        CustomerDao customerDao = new CustomerDaoImpl();
+        CustomerDaoImpl customerDao = new CustomerDaoImpl();
 
         if (customer.getRentedCarId() == null) {
             System.out.println("\nYou didn't rent a car!");
@@ -105,7 +102,7 @@ public class CustomerMenu implements Menu {
 
     private boolean rentCar(BufferedReader userInput, Customer customer) {
         Car chosenCar;
-        CustomerDao customerDao = new CustomerDaoImpl();
+        CustomerDaoImpl customerDao = new CustomerDaoImpl();
         ManagerMenuCompanies menuCompanies = new ManagerMenuCompanies();
         Company chosenCompany;
 
@@ -178,15 +175,15 @@ public class CustomerMenu implements Menu {
             if (option > companyCars.size())
                 System.out.println("Car with such number does not exist.");
             else
-                car = carDao.selectCar(companyCars.get(option - 1).getId());
+                car = carDao.select(companyCars.get(option - 1).getId());
         }
         return car;
     }
 
     private Customer chooseCustomer(BufferedReader userInput) {
         Customer customer = null;
-        CustomerDao customerDao = new CustomerDaoImpl();
-        List<Customer> customers = customerDao.selectAllCustomers();
+        CustomerDaoImpl customerDao = new CustomerDaoImpl();
+        List<Customer> customers = customerDao.selectAll();
 
         if (!printCustomersList(customers))
             return null;
@@ -209,7 +206,7 @@ public class CustomerMenu implements Menu {
             if (option > customers.size())
                 System.out.println("Customer with such number does not exist.");
             else
-                customer = customerDao.selectCustomer(customers.get(option - 1).getId());
+                customer = customerDao.select(customers.get(option - 1).getId());
         }
 
         return customer;

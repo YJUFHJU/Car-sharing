@@ -1,6 +1,6 @@
 package carsharing;
 
-public class Company extends TableEntity {
+public class Company extends Entity {
 
     public Company(Integer id, String name) {
         super(id, name);

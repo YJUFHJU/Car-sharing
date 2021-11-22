@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarDaoImpl implements CarDao {
+public class CarDaoImpl implements EntityDao<Car> {
     private final static String tableName = "CAR";
 
     private final static String INSERT_CAR = String.format("insert into %s(NAME, COMPANY_ID) values(?, ?);", tableName);
@@ -18,53 +18,14 @@ public class CarDaoImpl implements CarDao {
     private final static String SELECT_AVL_CARS_BY_CO_ID = String.format("select * from %s where COMPANY_ID=? " +
                 "and ID not in (select RENTED_CAR_ID from CUSTOMER where RENTED_CAR_ID is not null);", tableName);
 
-    public List<Car> selectAvlCarsByCoId(int companyID) {
-        List<Car> cars = new ArrayList<>();
 
-        try (Connection connection = DBManager.getConnection();
-             PreparedStatement prepStat = connection.prepareStatement(SELECT_AVL_CARS_BY_CO_ID)) {
-
-            prepStat.setInt(1, companyID);
-
-            ResultSet resultSet = prepStat.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("ID");
-                String name = resultSet.getString("NAME");
-
-                cars.add(new Car(id, name, companyID));
-            }
-
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-        return cars;
+    @Override
+    public List<Car> selectAll() {
+        return null;
     }
 
     @Override
-    public List<Car> selectCarsByCoId(int companyID) {
-        List<Car> cars = new ArrayList<>();
-
-        try (Connection connection = DBManager.getConnection();
-             PreparedStatement prepStat = connection.prepareStatement(SELECT_CARS_BY_CO_ID)) {
-
-            prepStat.setInt(1, companyID);
-
-            ResultSet resultSet = prepStat.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("ID");
-                String name = resultSet.getString("NAME");
-
-                cars.add(new Car(id, name, companyID));
-            }
-
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-        return cars;
-    }
-
-    @Override
-    public Car selectCar(int ID) {
+    public Car select(int ID) {
         Car car = null;
 
         try (Connection connection = DBManager.getConnection();
@@ -88,7 +49,7 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public void insertCar(Car car) throws SQLException {
+    public void insert(Car car) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(INSERT_CAR)) {
 
@@ -99,7 +60,7 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public void deleteCar(int ID) throws SQLException {
+    public void delete(int ID) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(DELETE_CAR_BY_ID)) {
 
@@ -109,7 +70,7 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public void updateCar(int ID, String newName) throws SQLException {
+    public void update(int ID, String newName) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(RENAME_CAR_BY_ID)) {
 
@@ -117,5 +78,49 @@ public class CarDaoImpl implements CarDao {
             prepStat.setInt(2, ID);
             prepStat.execute();
         }
+    }
+
+    public List<Car> selectAvlCarsByCoId(int companyID) {
+        List<Car> cars = new ArrayList<>();
+
+        try (Connection connection = DBManager.getConnection();
+             PreparedStatement prepStat = connection.prepareStatement(SELECT_AVL_CARS_BY_CO_ID)) {
+
+            prepStat.setInt(1, companyID);
+
+            ResultSet resultSet = prepStat.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("ID");
+                String name = resultSet.getString("NAME");
+
+                cars.add(new Car(id, name, companyID));
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return cars;
+    }
+
+    public List<Car> selectCarsByCoId(int companyID) {
+        List<Car> cars = new ArrayList<>();
+
+        try (Connection connection = DBManager.getConnection();
+             PreparedStatement prepStat = connection.prepareStatement(SELECT_CARS_BY_CO_ID)) {
+
+            prepStat.setInt(1, companyID);
+
+            ResultSet resultSet = prepStat.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("ID");
+                String name = resultSet.getString("NAME");
+
+                cars.add(new Car(id, name, companyID));
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return cars;
     }
 }

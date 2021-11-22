@@ -8,7 +8,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDaoImpl implements CustomerDao {
+public class CustomerDaoImpl implements EntityDao<Customer> {
     private final static String tableName = "CUSTOMER";
 
     private final static String INSERT_CUSTOMER = String.format("insert into %s(NAME, RENTED_CAR_ID) values(?, ?);", tableName);
@@ -19,7 +19,7 @@ public class CustomerDaoImpl implements CustomerDao {
     private final static String UPDATE_RENTED_CAR_ID = String.format("update %s set RENTED_CAR_ID=? where ID=?;", tableName);
 
     @Override
-    public List<Customer> selectAllCustomers() {
+    public List<Customer> selectAll() {
         List<Customer> customers = new ArrayList<>();
 
         try (Connection connection = DBManager.getConnection();
@@ -42,7 +42,7 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public Customer selectCustomer(Integer ID) {
+    public Customer select(int ID) {
         Customer customer = null;
 
         try (Connection connection = DBManager.getConnection();
@@ -67,7 +67,7 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public void insertCustomer(Customer customer) throws SQLException {
+    public void insert(Customer customer) throws SQLException {
 
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(INSERT_CUSTOMER)) {
@@ -83,7 +83,7 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public void deleteCustomer(int ID) throws SQLException {
+    public void delete(int ID) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(DELETE_CUSTOMER_BY_ID)) {
 
@@ -93,7 +93,7 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public void updateCustomer(int ID, String newName) throws SQLException {
+    public void update(int ID, String newName) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(RENAME_CUSTOMER_BY_ID)) {
 
@@ -103,7 +103,6 @@ public class CustomerDaoImpl implements CustomerDao {
         }
     }
 
-    @Override
     public boolean updateRentedCarId(Customer customer, Integer newId) throws SQLException {
         try (Connection connection = DBManager.getConnection();
              PreparedStatement prepStat = connection.prepareStatement(UPDATE_RENTED_CAR_ID)) {

@@ -1,9 +1,7 @@
 package carsharing.menunavigating;
 
 import carsharing.Company;
-import carsharing.CompanyDao;
 import carsharing.CompanyDaoImpl;
-//import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,7 +58,7 @@ public class ManagerMenuCompanies implements Menu {
     }
 
     private void renameCompany(BufferedReader userInput) {
-        CompanyDao companyDao = new CompanyDaoImpl();
+        CompanyDaoImpl companyDao = new CompanyDaoImpl();
         Company chosenCompany = chooseCompany(userInput);
 
         if (chosenCompany == null)
@@ -69,7 +67,7 @@ public class ManagerMenuCompanies implements Menu {
         System.out.println("\nEnter the company new name:");
 
         try {
-            companyDao.updateCompany(chosenCompany.getId(), userInput.readLine().strip());
+            companyDao.update(chosenCompany.getId(), userInput.readLine().strip());
             System.out.println("The company was renamed!");
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
@@ -89,14 +87,14 @@ public class ManagerMenuCompanies implements Menu {
     }
 
     private void deleteCompany(BufferedReader userInput) {
-        CompanyDao companyDao = new CompanyDaoImpl();
+        CompanyDaoImpl companyDao = new CompanyDaoImpl();
         Company chosenCompany = chooseCompany(userInput);
 
         if (chosenCompany == null)
             return;
 
         try {
-            companyDao.deleteCompany(chosenCompany.getId());
+            companyDao.delete(chosenCompany.getId());
             System.out.println("\nCompany was successfully deleted!");
         } catch (SQLException sqle) {
         	if (sqle.getErrorCode() == ERROR_CODES.REFER_INTEGRITY)
@@ -107,12 +105,12 @@ public class ManagerMenuCompanies implements Menu {
     }
 
     private void createCompany(BufferedReader userInput) {
-        CompanyDao companyDao = new CompanyDaoImpl();
+        CompanyDaoImpl companyDao = new CompanyDaoImpl();
         System.out.println("\nEnter the company name:");
 
         try {
             String name = userInput.readLine().strip();
-            companyDao.insertCompany(new Company(1, name));
+            companyDao.insert(new Company(1, name));
             System.out.println("\nThe company was created!");
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
@@ -133,8 +131,8 @@ public class ManagerMenuCompanies implements Menu {
 
     Company chooseCompany(BufferedReader userInput) {
         Company company = null;
-        CompanyDao companyDao = new CompanyDaoImpl();
-        List<Company> companies = companyDao.selectAllCompanies();
+        CompanyDaoImpl companyDao = new CompanyDaoImpl();
+        List<Company> companies = companyDao.selectAll();
 
         if (!printCompaniesList(companies))
             return null;
@@ -157,7 +155,7 @@ public class ManagerMenuCompanies implements Menu {
             if (option > companies.size())
                 System.out.println("Company with such number does not exist.");
             else
-                company = companyDao.selectCompany(companies.get(option - 1).getId());
+                company = companyDao.select(companies.get(option - 1).getId());
 
         }
 

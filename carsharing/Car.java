@@ -1,6 +1,6 @@
 package carsharing;
 
-public class Car extends TableEntity {
+public class Car extends Entity {
     private Integer companyId;
 
     public Car(Integer id, String name, Integer companyId) {

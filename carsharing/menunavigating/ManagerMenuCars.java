@@ -1,7 +1,6 @@
 package carsharing.menunavigating;
 
 import carsharing.Car;
-import carsharing.CarDao;
 import carsharing.CarDaoImpl;
 import carsharing.Company;
 
@@ -25,7 +24,7 @@ public class ManagerMenuCars implements Menu {
     @Override
     public void navigate(BufferedReader userInput) {
         String option = "0";
-        CarDao carDao = new CarDaoImpl();
+        CarDaoImpl carDao = new CarDaoImpl();
         Company chosenCompany = new ManagerMenuCompanies().chooseCompany(userInput);
 
         if (chosenCompany == null)
@@ -64,7 +63,7 @@ public class ManagerMenuCars implements Menu {
     }
 
     private void renameCarByCompany(BufferedReader userInput, Company company) {
-        CarDao carDao = new CarDaoImpl();
+        CarDaoImpl carDao = new CarDaoImpl();
         Car chosenCar = chooseCarByCompany(userInput, company);
 
         if (chosenCar == null)
@@ -73,8 +72,8 @@ public class ManagerMenuCars implements Menu {
         System.out.println("\nEnter the car new name:");
 
         try {
-            carDao.updateCar(chosenCar.getId(), userInput.readLine().strip());
-            System.out.println("The car was renamed!");
+            carDao.update(chosenCar.getId(), userInput.readLine().strip());
+            System.out.println("\nThe car was renamed!");
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
             switch (sqlicve.getErrorCode()) {
@@ -93,27 +92,27 @@ public class ManagerMenuCars implements Menu {
     }
 
     private void deleteCarByCompany(BufferedReader userInput, Company company) {
-        CarDao carDao = new CarDaoImpl();
+        CarDaoImpl carDao = new CarDaoImpl();
         Car chosenCar = chooseCarByCompany(userInput, company);
 
         if (chosenCar == null)
             return;
 
         try {
-            carDao.deleteCar(chosenCar.getId());
-            System.out.println("Car was deleted successfully!");
+            carDao.delete(chosenCar.getId());
+            System.out.println("\nCar was deleted successfully!");
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
     }
 
     private void createCarByCompany(BufferedReader userInput, Company company) {
-        CarDao carDao = new CarDaoImpl();
+        CarDaoImpl carDao = new CarDaoImpl();
         System.out.println("\nEnter the car name:");
 
         try {
-            carDao.insertCar(new Car(1, userInput.readLine().strip(), company.getId()));
-            System.out.println("The car was created!");
+            carDao.insert(new Car(1, userInput.readLine().strip(), company.getId()));
+            System.out.println("\nThe car was created!");
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
             switch (sqlicve.getErrorCode()) {
@@ -133,7 +132,7 @@ public class ManagerMenuCars implements Menu {
 
     Car chooseCarByCompany(BufferedReader userInput, Company chosenCompany) {
         Car car = null;
-        CarDao carDao = new CarDaoImpl();
+        CarDaoImpl carDao = new CarDaoImpl();
         ManagerMenuCars menuCars = new ManagerMenuCars();
 
         List<Car> companyCars = carDao.selectCarsByCoId(chosenCompany.getId());
@@ -159,7 +158,7 @@ public class ManagerMenuCars implements Menu {
             if (option > companyCars.size())
                 System.out.println("Car with such number does not exist.");
             else
-                car = carDao.selectCar(companyCars.get(option - 1).getId());
+                car = carDao.select(companyCars.get(option - 1).getId());
         }
         return car;
     }
